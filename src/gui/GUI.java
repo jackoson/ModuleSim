@@ -1,7 +1,7 @@
 package gui;
 
 import res.ResourceLoader;
-import simulator.Main;
+import simulator.App;
 
 import java.util.ArrayList;
 import java.awt.*;
@@ -50,11 +50,11 @@ public class GUI {
      * Updates the window title to "ModuleSim - /path/to/file.modsim"
      */
 	public void updateTitle() {
-        if (Main.sim.filePath.isEmpty()) {
+        if (App.sim.filePath.isEmpty()) {
             frame.setTitle("ModuleSim - Unsaved Simulation");
         }
         else {
-            frame.setTitle("ModuleSim - " + Main.sim.filePath);
+            frame.setTitle("ModuleSim - " + App.sim.filePath);
         }
     }
 

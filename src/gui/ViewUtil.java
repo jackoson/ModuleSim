@@ -31,10 +31,10 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
     public static Port portAt(double x, double y) {
         double portR = 10;
 
-        synchronized (Main.sim) {
-            int i = Main.sim.getModules().size() - 1;
+        synchronized (App.sim) {
+            int i = App.sim.getModules().size() - 1;
             for (; i >= 0; i--) {
-                BaseModule m = Main.sim.getModules().get(i);
+                BaseModule m = App.sim.getModules().get(i);
 
                 double[] pt = {x, y};
 
@@ -112,10 +112,11 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
      * @return
      */
     public static PickableEntity entityAt(double x, double y) {
-        synchronized (Main.sim) {
+        synchronized (App.sim) {
             double[] pt = {x, y};
 
-            try {Main.ui.view.wToV.inverseTransform(pt, 0, pt, 0, 1);}
+            try {
+                App.ui.view.wToV.inverseTransform(pt, 0, pt, 0, 1);}
             catch (Exception e) {
                 System.err.println("Non inversible transform");
             }
@@ -123,7 +124,7 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
             Vec2 clickPt = new Vec2(pt);
 
             // Loop the entities
-            for (PickableEntity e : Main.sim.getEntities()) {
+            for (PickableEntity e : App.sim.getEntities()) {
                 if (e.intersects(clickPt)) {
                     return e;
                 }
@@ -144,10 +145,11 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
     public static List<PickableEntity> entitiesWithin(double x, double y, double x2, double y2) {
         List<PickableEntity> result = new ArrayList<PickableEntity>();
 
-        synchronized (Main.sim) {
+        synchronized (App.sim) {
             double[] pt = {x, y, x2, y2};
 
-            try {Main.ui.view.wToV.inverseTransform(pt, 0, pt, 0, 2);}
+            try {
+                App.ui.view.wToV.inverseTransform(pt, 0, pt, 0, 2);}
             catch (Exception e) {
                 System.err.println("Non inversible transform");
             }
@@ -158,7 +160,7 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
             y2 = pt[3];
 
             // Loop the entities
-            for (PickableEntity e : Main.sim.getEntities()) {
+            for (PickableEntity e : App.sim.getEntities()) {
                 if (e.within(x, y, x2, y2)) {
                     result.add(e);
                 }
@@ -174,7 +176,8 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
     public static Vec2 screenToWorld(Vec2 p) {
         double[] pt = p.asArray();
 
-        try {Main.ui.view.wToV.inverseTransform(pt, 0, pt, 0, 1);}
+        try {
+            App.ui.view.wToV.inverseTransform(pt, 0, pt, 0, 1);}
         catch (Exception e) {}
 
         return new Vec2(pt);
@@ -186,7 +189,7 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
     public static Vec2 worldToScreen(Vec2 p) {
         double[] pt = p.asArray();
 
-        Main.ui.view.wToV.transform(pt, 0, pt, 0, 1);
+        App.ui.view.wToV.transform(pt, 0, pt, 0, 1);
 
         return new Vec2(pt);
     }
@@ -199,17 +202,17 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
             PickableEntity targ = entityAt(e.getX(), e.getY());
 
             if (targ != null) {
-                Main.ui.view.select(targ);
-                Main.ui.popup.showEntityMenu(Main.ui.view.selection, e.getX(), e.getY());
+                App.ui.view.select(targ);
+                App.ui.popup.showEntityMenu(App.ui.view.selection, e.getX(), e.getY());
             }
             else {
-                Main.ui.popup.showEntityMenu(Main.ui.view.selection, e.getX(), e.getY());
+                App.ui.popup.showEntityMenu(App.ui.view.selection, e.getX(), e.getY());
             }
         }
     }
 
     public void mouseEntered(MouseEvent e) {
-        Main.ui.view.requestFocusInWindow();
+        App.ui.view.requestFocusInWindow();
     }
 
     public void mouseExited(MouseEvent e) {}
@@ -219,7 +222,7 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
 
         if (e.getButton() == MouseEvent.BUTTON1) {
             // Left click handled by tools
-            BaseTool tool = Main.ui.view.curTool;
+            BaseTool tool = App.ui.view.curTool;
 
             PickableEntity targ = entityAt(e.getX(), e.getY());
 
@@ -232,7 +235,7 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
 
             if (!handled) {
                 if (tool != null) {
-                    Main.ui.view.curTool = tool.lbDown(e.getX(), e.getY());
+                    App.ui.view.curTool = tool.lbDown(e.getX(), e.getY());
                 }
                 else {
                     Port p = portAt(e.getX(), e.getY());
@@ -240,12 +243,12 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
                     //Link behaviour
                     if (p != null) {
                         tool = new LinkTool();
-                        Main.ui.view.curTool = tool.lbDown(e.getX(), e.getY());
+                        App.ui.view.curTool = tool.lbDown(e.getX(), e.getY());
                     }
                     // Selection behaviour
                     else {
                         tool = new SelectTool();
-                        Main.ui.view.curTool = tool.lbDown(e.getX(), e.getY());
+                        App.ui.view.curTool = tool.lbDown(e.getX(), e.getY());
                     }
                 }
             }
@@ -254,24 +257,24 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
             // Camera behaviour
             cStartX = e.getX();
             cStartY = e.getY();
-            oldCX = Main.ui.view.camX;
-            oldCY = Main.ui.view.camY;
+            oldCX = App.ui.view.camX;
+            oldCY = App.ui.view.camY;
             camDrag = true;
         }
     }
 
     public void mouseReleased(MouseEvent e) {
         testKeys(e);
-        BaseTool tool = Main.ui.view.curTool;
+        BaseTool tool = App.ui.view.curTool;
 
         if (e.getButton() == MouseEvent.BUTTON1) {
             if (tool != null) {
-                Main.ui.view.curTool = tool.lbUp(e.getX(), e.getY());
+                App.ui.view.curTool = tool.lbUp(e.getX(), e.getY());
             }
             else {
                 PickableEntity targ = entityAt(e.getX(), e.getY());
                 if (targ == null) {
-                    Main.ui.view.clearSelect();
+                    App.ui.view.clearSelect();
                 }
                 else if (targ.getType() == PickableEntity.MODULE) {
                     BaseModule m = (BaseModule) targ;
@@ -286,36 +289,36 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
 
     public void mouseDragged(MouseEvent e) {
         testKeys(e);
-        BaseTool tool = Main.ui.view.curTool;
+        BaseTool tool = App.ui.view.curTool;
 
         if (camDrag) {
-            Main.ui.view.camX = oldCX + e.getX() - cStartX;
-            Main.ui.view.camY = oldCY + e.getY() - cStartY;
+            App.ui.view.camX = oldCX + e.getX() - cStartX;
+            App.ui.view.camY = oldCY + e.getY() - cStartY;
         }
         else if (tool != null) {
-            Main.ui.view.curTool = tool.mouseDrag(e.getX(), e.getY());
+            App.ui.view.curTool = tool.mouseDrag(e.getX(), e.getY());
         }
     }
 
     public void mouseMoved(MouseEvent e) {
         testKeys(e);
-        BaseTool tool = Main.ui.view.curTool;
+        BaseTool tool = App.ui.view.curTool;
 
         Port p = portAt(e.getX(), e.getY());
         if (p != null) {
             if (p.hasDirection()) {
-                Main.ui.view.setToolTipText(p.text + " - " + p.getVal().toString() + (p.canOutput() ? " OUT" : " IN"));
+                App.ui.view.setToolTipText(p.text + " - " + p.getVal().toString() + (p.canOutput() ? " OUT" : " IN"));
             }
             else {
-                Main.ui.view.setToolTipText(p.text + " - Disconnected");
+                App.ui.view.setToolTipText(p.text + " - Disconnected");
             }
         }
         else {
-            Main.ui.view.setToolTipText(null);
+            App.ui.view.setToolTipText(null);
         }
 
         if (tool != null) {
-            Main.ui.view.curTool = tool.mouseMove(e.getX(), e.getY());
+            App.ui.view.curTool = tool.mouseMove(e.getX(), e.getY());
         }
     }
 
@@ -323,16 +326,16 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
         testKeys(e);
         if (e.getScrollType() == MouseWheelEvent.WHEEL_UNIT_SCROLL) {
             if (e.getWheelRotation() < 0) {
-                Main.ui.view.zoomIn(e.getX(), e.getY());
+                App.ui.view.zoomIn(e.getX(), e.getY());
             }
             else {
-                Main.ui.view.zoomOut(e.getX(), e.getY());
+                App.ui.view.zoomOut(e.getX(), e.getY());
             }
         }
     }
 
     public void keyPressed(KeyEvent e) {
-        View v = Main.ui.view;
+        View v = App.ui.view;
 
         // Cancel tool usage on escape press
         if (e.getKeyChar() == KeyEvent.VK_ESCAPE) {
@@ -352,7 +355,7 @@ public class ViewUtil implements MouseListener, MouseMotionListener, MouseWheelL
     }
 
     public void keyReleased(KeyEvent e) {
-        View v = Main.ui.view;
+        View v = App.ui.view;
         if (v.curTool != null) {
             v.curTool.keyUp(e.getKeyCode());
         }

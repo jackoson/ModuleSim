@@ -3,7 +3,7 @@ package util;
 import modules.BaseModule;
 import modules.Link;
 import modules.parts.Port;
-import simulator.Main;
+import simulator.App;
 import simulator.PickableEntity;
 import tools.CreateOperation;
 
@@ -56,12 +56,12 @@ public class ModuleClipboard {
 
         // Add to the simulation
         for (BaseModule m : modules) {
-            Main.sim.addEntity(m);
-            Main.ui.view.opStack.pushOp(new CreateOperation(m));
+            App.sim.addEntity(m);
+            App.ui.view.opStack.pushOp(new CreateOperation(m));
         }
         for (Link l : links) {
-            Main.sim.addLink(l);
-            Main.ui.view.opStack.pushOp(new CreateOperation(l));
+            App.sim.addLink(l);
+            App.ui.view.opStack.pushOp(new CreateOperation(l));
 
             // Need to return control points as well
             output.addAll(l.curve.ctrlPts);

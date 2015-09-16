@@ -451,7 +451,7 @@ public abstract class BaseModule extends PickableEntity {
         toWorld.translate(pos.x, pos.y);
         toWorld.rotate((Math.PI / 2) * orientation);
 
-        toView = new AffineTransform(Main.ui.view.wToV);
+        toView = new AffineTransform(App.ui.view.wToV);
         toView.concatenate(toWorld);
 
         // Update links
@@ -467,8 +467,8 @@ public abstract class BaseModule extends PickableEntity {
      * Generates on-grid coords
      */
     public void snapToGrid() {
-        pos.x = Math.round(pos.x / Main.sim.grid) * Main.sim.grid;
-        pos.y = Math.round(pos.y / Main.sim.grid) * Main.sim.grid;
+        pos.x = Math.round(pos.x / App.sim.grid) * App.sim.grid;
+        pos.y = Math.round(pos.y / App.sim.grid) * App.sim.grid;
     }
 
     /**
@@ -490,10 +490,10 @@ public abstract class BaseModule extends PickableEntity {
      */
     @Override
     public void delete() {
-        Main.sim.removeEntity(this);
-        Main.ui.view.deselect(this);
+        App.sim.removeEntity(this);
+        App.ui.view.deselect(this);
 
-        Main.ui.view.opStack.pushOp(new DeleteOperation(this));
+        App.ui.view.opStack.pushOp(new DeleteOperation(this));
     }
 
     /**

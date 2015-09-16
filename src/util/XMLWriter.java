@@ -17,14 +17,12 @@ import javax.xml.transform.stream.StreamResult;
 import modules.BaseModule;
 import modules.Link;
 import modules.parts.BidirPort;
-import modules.parts.Input;
-import modules.parts.Output;
 import modules.parts.Port;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import simulator.Main;
+import simulator.App;
 
 public class XMLWriter {
 
@@ -32,11 +30,11 @@ public class XMLWriter {
      * Generates unique IDs for entities in the simulation
      */
     private static void genIDs() {
-        synchronized (Main.sim) {
+        synchronized (App.sim) {
             int id = 0;
 
             // Loop the modules and their ports
-            for (BaseModule m : Main.sim.getModules()) {
+            for (BaseModule m : App.sim.getModules()) {
                 m.ID = id++;
 
                 for (Port p : m.ports) {
@@ -64,18 +62,18 @@ public class XMLWriter {
 
             // Store the view information
             Element view = doc.createElement("view");
-            View v = Main.ui.view;
+            View v = App.ui.view;
             view.setAttribute("camX", "" + v.camX);
             view.setAttribute("camY", "" + v.camY);
             view.setAttribute("zoom", "" + v.zoomI);
             rootElem.appendChild(view);
 
-            synchronized (Main.sim) {
+            synchronized (App.sim) {
                 // Generate IDs for storage
                 genIDs();
 
                 // Store the modules
-                List<BaseModule> modules = Main.sim.getModules();
+                List<BaseModule> modules = App.sim.getModules();
                 Element mods = doc.createElement("modules");
                 rootElem.appendChild(mods);
 
@@ -142,7 +140,7 @@ public class XMLWriter {
                 }
 
                 // Store the links
-                List<Link> links = Main.sim.getLinks();
+                List<Link> links = App.sim.getLinks();
                 Element linksElem = doc.createElement("links");
                 rootElem.appendChild(linksElem);
 
@@ -165,7 +163,7 @@ public class XMLWriter {
 
             // Store the latest id
             /*Element idElem = doc.createElement("lastid");
-            idElem.setAttribute("id", "" + Main.lastID);
+            idElem.setAttribute("id", "" + App.lastID);
             rootElem.appendChild(idElem);*/
 
             // Saving operation
@@ -177,8 +175,8 @@ public class XMLWriter {
             t.transform(src, r);
             System.out.println("Saved simulation to " + xmlFile.getAbsolutePath());
 
-            Main.sim.filePath = xmlFile.getPath();
-            Main.ui.updateTitle();
+            App.sim.filePath = xmlFile.getPath();
+            App.ui.updateTitle();
 
         } catch (Exception e) {
             e.printStackTrace();

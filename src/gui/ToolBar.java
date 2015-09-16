@@ -14,7 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import res.ResourceLoader;
-import simulator.Main;
+import simulator.App;
 import simulator.Sim;
 
 public class ToolBar implements ActionListener, ChangeListener {
@@ -101,14 +101,14 @@ public class ToolBar implements ActionListener, ChangeListener {
 		// Handle toolbar actions
 		String cmd = e.getActionCommand();
 		if (cmd.equals(btnPause.getActionCommand())) {
-			Main.sim.stop();
+			App.sim.stop();
 		}
 		else if (cmd.equals(btnRun.getActionCommand())) {
-			Main.sim.start();
+			App.sim.start();
 		}
 		else if (cmd.equals(btnStep.getActionCommand())) {
-		    Main.sim.stop();
-		    Main.sim.step();
+		    App.sim.stop();
+		    App.sim.step();
 		}
 	}
 

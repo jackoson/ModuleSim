@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.util.List;
 
 import gui.ViewUtil;
-import simulator.Main;
+import simulator.App;
 import simulator.PickableEntity;
 import util.Vec2;
 
@@ -25,16 +25,16 @@ public class SelectTool extends BaseTool {
         }
         else if (e != null) {
             if (BaseTool.SHIFT)
-                Main.ui.view.toggleSelect(e);
+                App.ui.view.toggleSelect(e);
             else {
                 // Single-object selection on click
-                Main.ui.view.clearSelect();
-                Main.ui.view.select(e);
+                App.ui.view.clearSelect();
+                App.ui.view.select(e);
             }
         }
         else {
             // Clear the selection if we click on an empty spot
-            Main.ui.view.clearSelect();
+            App.ui.view.clearSelect();
         }
 
         return null;
@@ -57,7 +57,7 @@ public class SelectTool extends BaseTool {
         PickableEntity e = ViewUtil.entityAt(x, y);
 
         if (!dragging) {
-            if (e != null && Main.ui.view.selection.contains(e)) {
+            if (e != null && App.ui.view.selection.contains(e)) {
                 return new MoveTool(x, y);
             }
             else {
@@ -70,7 +70,7 @@ public class SelectTool extends BaseTool {
             }
         }
         else {
-            if (!BaseTool.SHIFT) Main.ui.view.clearSelect();
+            if (!BaseTool.SHIFT) App.ui.view.clearSelect();
 
             //System.out.println("More dragging " + x + ", " + y);
             dragPos.set(x, y);
@@ -84,9 +84,9 @@ public class SelectTool extends BaseTool {
             double ry2 = Math.max(dragStart.y, dragStart.y + delta.y);
 
             List<PickableEntity> selected = ViewUtil.entitiesWithin(rx, ry, rx2, ry2);
-            Main.ui.view.select(selected);
+            App.ui.view.select(selected);
         }
-        
+
         return this;
     }
 
@@ -96,10 +96,10 @@ public class SelectTool extends BaseTool {
             if (dragging) {
                 Vec2 delta = new Vec2(dragPos);
                 delta.sub(dragStart);
-        
+
                 int x = (int) Math.min(dragStart.x, dragStart.x + delta.x);
                 int y = (int) Math.min(dragStart.y, dragStart.y + delta.y);
-        
+
                 g.setColor(Color.BLUE);
                 g.setStroke(new BasicStroke(1));
                 g.drawRect(x, y, (int)Math.abs(delta.x), (int)Math.abs(delta.y));

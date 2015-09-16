@@ -2,7 +2,7 @@ package tools;
 
 import modules.Link;
 import modules.parts.Port;
-import simulator.Main;
+import simulator.App;
 import simulator.PickableEntity;
 import util.BinData;
 import util.CtrlPt;
@@ -27,18 +27,18 @@ public class DeleteOperation extends BaseOperation {
                 c.parent.addPt(c.index, c);
                 c.parent.calcCurves();
             }
-            Main.sim.addEntity(entity);
+            App.sim.addEntity(entity);
         }
         if (link != null) {
             link.src.link = link;
             link.targ.link = link;
-            Main.sim.addLink(link);
+            App.sim.addLink(link);
 
             // Propagate change
             link.src.setMode(Port.Mode.MODE_OUTPUT);
             link.targ.setMode(Port.Mode.MODE_INPUT);
             link.targ.setVal(link.src.getVal());
-            Main.sim.propagate(link.targ.owner);
+            App.sim.propagate(link.targ.owner);
         }
     }
 
@@ -50,16 +50,16 @@ public class DeleteOperation extends BaseOperation {
                 c.parent.removePt(c);
                 c.parent.calcCurves();
             }
-            Main.sim.removeEntity(entity);
+            App.sim.removeEntity(entity);
         }
         if (link != null) {
             link.src.link = null;
             link.targ.link = null;
-            Main.sim.removeLink(link);
+            App.sim.removeLink(link);
 
             // Propagate change
             link.targ.setVal(new BinData());
-            Main.sim.propagate(link.targ.owner);
+            App.sim.propagate(link.targ.owner);
 
             link.src.setMode(Port.Mode.MODE_BIDIR);
             link.targ.setMode(Port.Mode.MODE_BIDIR);

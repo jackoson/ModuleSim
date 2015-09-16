@@ -12,7 +12,7 @@ import modules.BaseModule;
 import modules.BaseModule.AvailableModules;
 import modules.NRAM;
 import modules.parts.Port;
-import simulator.Main;
+import simulator.App;
 import simulator.PickableEntity;
 import tools.RotateOperation;
 
@@ -59,16 +59,16 @@ public class ContextMenu  {
                     throw new InvalidParameterException(cmd + " is not a valid rotation command.");
                 }
 
-                Main.ui.view.opStack.beginCompoundOp();
+                App.ui.view.opStack.beginCompoundOp();
                 for (PickableEntity e : entities) {
                     if (e.getClass().getGenericSuperclass() == BaseModule.class) {
                         BaseModule m = (BaseModule) e;
                         m.rotate(dir);
 
-                        Main.ui.view.opStack.pushOp(new RotateOperation(m, dir));
+                        App.ui.view.opStack.pushOp(new RotateOperation(m, dir));
                     }
                 }
-                Main.ui.view.opStack.endCompoundOp();
+                App.ui.view.opStack.endCompoundOp();
             }
         };
 
@@ -88,14 +88,14 @@ public class ContextMenu  {
         copy = new JMenuItem("Copy");
         copy.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Main.ui.view.copy(entities);
+                App.ui.view.copy(entities);
             }
         });
 
         paste = new JMenuItem("Paste");
         paste.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Main.ui.view.paste();
+                App.ui.view.paste();
             }
         });
 
@@ -103,7 +103,7 @@ public class ContextMenu  {
 		delete = new JMenuItem("Delete");
 		delete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-                Main.ui.view.deleteSelection();
+                App.ui.view.deleteSelection();
 			}
 		});
 
@@ -114,7 +114,7 @@ public class ContextMenu  {
 		ramEdit.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent arg0) {
 		        NRAM nram = (NRAM) entities.get(0);
-		        MemEdit editor = Main.ui.newMemEdit();
+		        MemEdit editor = App.ui.newMemEdit();
 		        editor.show(nram);
 		    }
 		});
@@ -162,7 +162,7 @@ public class ContextMenu  {
 	    }
 
 	    // A menu gets shown any which way
-	    menu.show(Main.ui.view, x, y);
+	    menu.show(App.ui.view, x, y);
 	}
 
 }

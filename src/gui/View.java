@@ -10,7 +10,7 @@ import javax.swing.*;
 
 import modules.BaseModule;
 import modules.Link;
-import simulator.Main;
+import simulator.App;
 import simulator.PickableEntity;
 import tools.BaseTool;
 import tools.OperationStack;
@@ -37,7 +37,7 @@ public class View extends JPanel {
     public ModuleClipboard clipboard = new ModuleClipboard();
 
     public List<PickableEntity> selection = new ArrayList<PickableEntity>();
-    
+
     public boolean quality = true;
 
     public View() {
@@ -83,8 +83,8 @@ public class View extends JPanel {
         g.setColor(new Color(230,230,230));
         double xD = (camX + getWidth()/2);
         double yD = (camY + getHeight()/2);
-        double xOff = (int)xD % (int)(Main.sim.grid * zoom);
-        double yOff = (int)yD % (int)(Main.sim.grid * zoom);
+        double xOff = (int)xD % (int)(App.sim.grid * zoom);
+        double yOff = (int)yD % (int)(App.sim.grid * zoom);
         g.translate(xOff, yOff);
         drawGrid(g);
 
@@ -92,8 +92,8 @@ public class View extends JPanel {
 
         // Draw links
         g.transform(wToV);
-        synchronized (Main.sim) {
-            for (Link l : Main.sim.getLinks()) {
+        synchronized (App.sim) {
+            for (Link l : App.sim.getLinks()) {
                 if (l == null) {
                     System.err.println("Warning: Null link encountered while drawing");
                     continue;
@@ -104,19 +104,19 @@ public class View extends JPanel {
             g.setTransform(old);
 
             // Draw modules
-            for (BaseModule m : Main.sim.getModules()) {
+            for (BaseModule m : App.sim.getModules()) {
                 m.updateXForm();
                 g.transform(m.toView);
                 m.paint(g);
-                
+
                 if (m.error) {
                     drawError(g);
                 }
-                
+
                 g.setTransform(old);
             }
 
-            for (BaseModule m : Main.sim.getModules()) {
+            for (BaseModule m : App.sim.getModules()) {
                 if (m.selected) {
                     g.transform(m.toView);
                     m.drawBounds(g);
@@ -139,7 +139,7 @@ public class View extends JPanel {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Monospaced", Font.BOLD, 10));
         DecimalFormat df = new DecimalFormat("#.##");
-        String num = df.format(Main.sim.itrPerSec);
+        String num = df.format(App.sim.itrPerSec);
         int pad = 20 - num.length();
         for (int i=0; i < pad; i++) num = " " + num;
         g.drawString(num + " iterations/s", 10, 10);
@@ -157,12 +157,12 @@ public class View extends JPanel {
         g.fillRect(-3, -16, 6, 20);
         g.fillOval(-3, 8, 6, 6);
     }
-    
+
     /**
      * Draws a grid
      */
     public void drawGrid(Graphics2D g) {
-        double grid = (int)(Main.sim.grid * zoom);
+        double grid = (int)(App.sim.grid * zoom);
 
         int xNum = (int)(getWidth() / grid);
         int yNum = (int)(getHeight() / grid);
@@ -223,11 +223,11 @@ public class View extends JPanel {
         clearSelect();
         opStack.endCompoundOp();
     }
-    
+
     public void copy(List<PickableEntity> entities) {
         clipboard.copy(entities);
     }
-    
+
     public void paste() {
         if (curTool != null) curTool.cancel();
         curTool = new PlaceTool(clipboard);

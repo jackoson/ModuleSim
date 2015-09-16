@@ -15,12 +15,11 @@ import modules.BaseModule;
 import modules.BaseModule.AvailableModules;
 import modules.Link;
 import modules.parts.BidirPort;
-import modules.parts.Input;
 import modules.parts.Port;
 
 import org.w3c.dom.*;
 
-import simulator.Main;
+import simulator.App;
 
 public class XMLReader {
 
@@ -38,11 +37,11 @@ public class XMLReader {
             doc.getDocumentElement().normalize();
 
             // Read the document elements into the program
-            Main.sim.newSim();
+            App.sim.newSim();
 
             // View load
             Element view = (Element) doc.getElementsByTagName("view").item(0);
-            View v = Main.ui.view;
+            View v = App.ui.view;
             v.camX = Double.parseDouble(view.getAttribute("camX"));
             v.camY = Double.parseDouble(view.getAttribute("camY"));
             v.zoomI = Integer.parseInt(view.getAttribute("zoom"));
@@ -128,7 +127,7 @@ public class XMLReader {
                     m.propagate();
 
                     // Add to the simulation
-                    Main.sim.addEntity(m);
+                    App.sim.addEntity(m);
                     m.enabled = true;
                 }
             }
@@ -179,7 +178,7 @@ public class XMLReader {
 
                     // Add to the simulation
                     if (l != null) {
-                        Main.sim.addLink(l);
+                        App.sim.addLink(l);
                     }
                     else {
                         badLinks++;
@@ -195,8 +194,8 @@ public class XMLReader {
             }
 
             // Save the file path
-            Main.sim.filePath = xmlFile.getPath();
-            Main.ui.updateTitle();
+            App.sim.filePath = xmlFile.getPath();
+            App.ui.updateTitle();
 
         } catch (Exception e) {
             e.printStackTrace();

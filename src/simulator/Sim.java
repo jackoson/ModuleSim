@@ -66,15 +66,15 @@ public class Sim implements Runnable {
             propModules.clear();
             entities.clear();
 
-            Main.ui.view.opStack.clearAll();
+            App.ui.view.opStack.clearAll();
             filePath = "";
-            Main.ui.updateTitle();
+            App.ui.updateTitle();
         }
     }
 
     /**
      * Module access (MUST be contained in
-     * synchronized (Main.sim) block)
+     * synchronized (App.sim) block)
      */
     public List<BaseModule> getModules() {
         return modules;
@@ -82,7 +82,7 @@ public class Sim implements Runnable {
 
     /**
      * Entity access (MUST be contained in
-     * synchronized (Main.sim) block)
+     * synchronized (App.sim) block)
      */
     public List<PickableEntity> getEntities() {
         return entities;
@@ -90,7 +90,7 @@ public class Sim implements Runnable {
 
     /**
      * Link access (MUST be contained in
-     * synchronized (Main.sim) block)
+     * synchronized (App.sim) block)
      */
     public List<Link> getLinks() {
         return links;
@@ -270,7 +270,7 @@ public class Sim implements Runnable {
         iterations++;
 
         // New ID array
-        visited = new boolean[Main.sim.getEntities().size()];
+        visited = new boolean[App.sim.getEntities().size()];
 
         for (int i = 0; i < propModules.size(); i++) {
             // Begin propagation at the clock and switches

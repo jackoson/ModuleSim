@@ -10,8 +10,7 @@ import java.util.prefs.Preferences;
 
 import javax.swing.*;
 
-import modules.BaseModule;
-import simulator.Main;
+import simulator.App;
 import util.XMLReader;
 import util.XMLWriter;
 
@@ -53,12 +52,12 @@ public class Menu {
         FileDialog fd = new FileDialog((java.awt.Frame) null, "Save File", FileDialog.SAVE);
         fd.setFilenameFilter(simFileFilter);
         // (?) can just append .modsim if the user doesn't
-        if (Main.sim.filePath.isEmpty()) {
+        if (App.sim.filePath.isEmpty()) {
             fd.setFile("*.modsim");
         }
         else {
-            int ind = Main.sim.filePath.lastIndexOf('/');
-            fd.setFile(Main.sim.filePath.substring(ind + 1));
+            int ind = App.sim.filePath.lastIndexOf('/');
+            fd.setFile(App.sim.filePath.substring(ind + 1));
         }
 
         fd.setDirectory(prefs.get("sim_fileDir", ""));
@@ -129,7 +128,7 @@ public class Menu {
         menuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String curPath = Main.sim.filePath;
+                String curPath = App.sim.filePath;
 
                 if (curPath.isEmpty()) {
                     saveAs();
@@ -159,9 +158,9 @@ public class Menu {
         menuItem.setToolTipText("Start editing a new simulation (discard the current one)");
         menuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Main.sim.newSim();
-                Main.ui.view.camX = 0;
-                Main.ui.view.camY = 0;
+                App.sim.newSim();
+                App.ui.view.camX = 0;
+                App.ui.view.camY = 0;
             }
         });
         fileMenu.add(menuItem);
@@ -187,7 +186,7 @@ public class Menu {
         JMenuItem item = new JMenuItem("Copy");
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Main.ui.view.copy(Main.ui.view.selection);
+                App.ui.view.copy(App.ui.view.selection);
             }
         });
         edit.add(item);
@@ -199,7 +198,7 @@ public class Menu {
         item = new JMenuItem("Paste");
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Main.ui.view.paste();
+                App.ui.view.paste();
             }
         });
         edit.add(item);
@@ -211,7 +210,7 @@ public class Menu {
         item = new JMenuItem("Undo");
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Main.ui.view.undo();
+                App.ui.view.undo();
             }
         });
         edit.add(item);
@@ -223,7 +222,7 @@ public class Menu {
         item = new JMenuItem("Redo");
         item.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
-                Main.ui.view.redo();
+                App.ui.view.redo();
             }
         });
         edit.add(item);
@@ -242,10 +241,10 @@ public class Menu {
         menuItem.setToolTipText("Toggles the running state of the simulation");
         menuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                if (Main.sim.running) {
-                    Main.sim.stop();
+                if (App.sim.running) {
+                    App.sim.stop();
                 } else {
-                    Main.sim.start();
+                    App.sim.start();
                 }
             }
         });
@@ -256,8 +255,8 @@ public class Menu {
         menuItem.setToolTipText("Steps, then pauses the simulation");
         menuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Main.sim.stop();
-                Main.sim.step();
+                App.sim.stop();
+                App.sim.step();
             }
         });
         menuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, 0));
@@ -275,7 +274,7 @@ public class Menu {
         menuItem.setToolTipText("Toggles high-quality rendering on/off");
         menuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                Main.ui.view.quality = !Main.ui.view.quality;
+                App.ui.view.quality = !App.ui.view.quality;
             }
         });
         view.add(menuItem);

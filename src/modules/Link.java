@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 import modules.parts.Port;
-import simulator.Main;
+import simulator.App;
 import tools.DeleteOperation;
 import util.BezierPath;
 import util.BinData;
@@ -59,7 +59,7 @@ public class Link {
         }
         else {
             // Start a compound operation (likely nested) so we can abort cleanly
-            Main.ui.view.opStack.beginCompoundOp();
+            App.ui.view.opStack.beginCompoundOp();
 
             // Cleanup old links
             if (source.link != null) {
@@ -103,7 +103,7 @@ public class Link {
             }
             else {
                 JOptionPane.showMessageDialog(null, "Unknown error during link creation");
-                Main.ui.view.opStack.cancelCompoundOp();
+                App.ui.view.opStack.cancelCompoundOp();
                 return null;
             }
 
@@ -119,16 +119,16 @@ public class Link {
                     m.error = true;
                 }
 
-                Main.ui.view.opStack.cancelCompoundOp();
+                App.ui.view.opStack.cancelCompoundOp();
                 return null;
             }
 
             // Changes are done
-            Main.ui.view.opStack.endCompoundOp();
+            App.ui.view.opStack.endCompoundOp();
 
             // Propagate
             newLink.targ.setVal(newLink.src.getVal());
-            Main.sim.propagate(newLink.targ.owner);
+            App.sim.propagate(newLink.targ.owner);
 
             return newLink;
         }
@@ -212,17 +212,17 @@ public class Link {
 
         // Propagate change
         targ.setVal(new BinData());
-        Main.sim.propagate(targ.owner);
+        App.sim.propagate(targ.owner);
 
         // Propagate (non-)directionality if applicable
         src.setMode(Port.Mode.MODE_BIDIR);
         targ.setMode(Port.Mode.MODE_BIDIR);
 
         // Remove from listings
-        Main.sim.removeLink(this);
+        App.sim.removeLink(this);
 
         // Store operation
-        Main.ui.view.opStack.pushOp(new DeleteOperation(this));
+        App.ui.view.opStack.pushOp(new DeleteOperation(this));
     }
 
 }

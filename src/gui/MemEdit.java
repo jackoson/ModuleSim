@@ -25,7 +25,7 @@ import javax.swing.JScrollBar;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import simulator.Main;
+import simulator.App;
 import util.BinData;
 import util.HexReader;
 import util.HexWriter;
@@ -35,7 +35,7 @@ public class MemEdit {
 
     private NRAM targ = null;
 
-    public final JDialog frame = new JDialog(Main.ui.frame, "Memory Viewer");
+    public final JDialog frame = new JDialog(App.ui.frame, "Memory Viewer");
     private final JMenuBar menu = new JMenuBar();
     private final JFileChooser filePick = new JFileChooser();
     private final FileNameExtensionFilter hexFilter = new FileNameExtensionFilter("Hex files", "hex");

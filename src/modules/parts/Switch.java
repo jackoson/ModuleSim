@@ -3,7 +3,7 @@ package modules.parts;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import simulator.Main;
+import simulator.App;
 
 /**
  * Visible, clickable toggle switch
@@ -37,7 +37,7 @@ public class Switch extends TogglePart {
 		if (xPt > x-w/2 && xPt < x+w/2 && yPt > y-h/2 && yPt < y+h/2) {
 			// Clicked
 			toggleEnabled();
-			Main.sim.propagate(owner);
+			App.sim.propagate(owner);
 			return true;
 		}
 

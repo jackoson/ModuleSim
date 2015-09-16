@@ -7,7 +7,7 @@ import java.io.FileReader;
 import javax.swing.JOptionPane;
 
 import modules.NRAM;
-import simulator.Main;
+import simulator.App;
 
 public class HexReader {
 
@@ -73,7 +73,7 @@ public class HexReader {
             }
 
             // Propagate change
-            Main.sim.propagate(nram);
+            App.sim.propagate(nram);
         }
         catch (Exception e) {
             e.printStackTrace();

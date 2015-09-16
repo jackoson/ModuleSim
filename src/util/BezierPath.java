@@ -4,9 +4,8 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import modules.parts.Input;
 import modules.parts.Port;
-import simulator.Main;
+import simulator.App;
 
 /**
  * Manages a path consisting of connected bezier curves
@@ -74,9 +73,9 @@ public class BezierPath {
 		Vec2 c1;
 
 		if (p.type == Port.CTRL || p.type == Port.CLK)
-			c1 = new Vec2(p.side * Main.sim.grid * 2, 0);
+			c1 = new Vec2(p.side * App.sim.grid * 2, 0);
 		else
-			c1 = new Vec2(0, p.side * Main.sim.grid * 2);
+			c1 = new Vec2(0, p.side * App.sim.grid * 2);
 
 		c1.add(p.getDisplayPos());
 		c1 = p.owner.objToWorld(c1);
@@ -101,9 +100,9 @@ public class BezierPath {
 		Vec2 c1;
 
 		if (p.type == Port.CTRL || p.type == Port.CLK)
-			c1 = new Vec2(p.side*Main.sim.grid*2, 0);
+			c1 = new Vec2(p.side* App.sim.grid*2, 0);
 		else
-			c1 = new Vec2(0, p.side*Main.sim.grid*2);
+			c1 = new Vec2(0, p.side* App.sim.grid*2);
 
 		c1.add(p.getDisplayPos());
 		c1 = p.owner.objToWorld(c1);
@@ -225,7 +224,7 @@ public class BezierPath {
 	public boolean removePt() {
 		if (ctrlPts.size() > 0) {
 			CtrlPt pt = ctrlPts.remove(ctrlPts.size() - 1);
-			Main.sim.removeEntity(pt);
+			App.sim.removeEntity(pt);
 			calcCurves();
 			return true;
 		}
@@ -239,7 +238,7 @@ public class BezierPath {
 	 */
     public void removePt(CtrlPt ctrlPt) {
         ctrlPts.remove(ctrlPt);
-        Main.sim.removeEntity(ctrlPt);
+        App.sim.removeEntity(ctrlPt);
         calcCurves();
     }
 
